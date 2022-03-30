@@ -1,16 +1,43 @@
-import { Stack, StackProps } from 'aws-cdk-lib';
+import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import { CodePipeline, CodePipelineSource, ShellStep, Step } from 'aws-cdk-lib/pipelines';
+import { ManualApprovalStep } from 'aws-cdk-lib/pipelines';
+import { MyPipelineAppStage } from './stage';
 
-export class CdkTestingStack extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
+export const ACC_ID = '026406728043';
+export const REGION = 'us-east-1';
+
+export class CiCdAwsPipelineDemoStack extends cdk.Stack {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
+    const pipeline = new CodePipeline(this, 'Pipeline', {
+      pipelineName: 'TestPipeline',
+      synth: new ShellStep('Synth', {
+        input: CodePipelineSource.gitHub(
+          'oa998/aws_pipeline_testing',
+          'main',
+          {
+            authentication: cdk.SecretValue.secretsManager('demo/pipeline/github-token')
+          }
+        ),
+        commands: [
+          'npm ci',
+          'npm run build',
+          'npx cdk synth'
+        ]
+      })
+    });
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'CdkTestingQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    const testingStage = pipeline.addStage(new MyPipelineAppStage(this, "test", {
+      env: { account: ACC_ID, region: REGION }
+    }));
+
+    testingStage.addPre(new ShellStep("Run Unit Tests", { commands: ['npm install', 'npm test'] }));
+    testingStage.addPost(new ManualApprovalStep('Manual approval before production'));
+
+    const prodStage = pipeline.addStage(new MyPipelineAppStage(this, "prod", {
+      env: { account: ACC_ID, region: REGION }
+    }));
   }
 }

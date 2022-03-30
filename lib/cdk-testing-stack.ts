@@ -7,7 +7,7 @@ import { MyPipelineAppStage } from './stage';
 export const ACC_ID = '026406728043';
 export const REGION = 'us-east-1';
 
-export class CiCdAwsPipelineDemoStack extends cdk.Stack {
+export class CDKTestingStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 

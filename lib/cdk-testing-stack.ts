@@ -1,7 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { CodePipeline, CodePipelineSource, ShellStep, Step } from 'aws-cdk-lib/pipelines';
-import { ManualApprovalStep } from 'aws-cdk-lib/pipelines';
+// import { ManualApprovalStep } from 'aws-cdk-lib/pipelines';
 import { MyPipelineAppStage } from './stage';
 
 export const ACC_ID = '026406728043';
@@ -29,14 +29,12 @@ export class CDKTestingStack extends cdk.Stack {
       })
     });
 
-    const testingStage = pipeline.addStage(new MyPipelineAppStage(this, "test", {
-      env: { account: ACC_ID, region: REGION }
-    }));
+    // const testingStage = pipeline.addStage(new MyPipelineAppStage(this, "test", {
+    //   env: { account: ACC_ID, region: REGION }
+    // }));
+    // testingStage.addPost(new ManualApprovalStep('Manual approval before production'));
 
-    testingStage.addPre(new ShellStep("Run Unit Tests", { commands: ['npm install', 'npm test'] }));
-    testingStage.addPost(new ManualApprovalStep('Manual approval before production'));
-
-    const prodStage = pipeline.addStage(new MyPipelineAppStage(this, "prod", {
+    pipeline.addStage(new MyPipelineAppStage(this, "prod", {
       env: { account: ACC_ID, region: REGION }
     }));
   }

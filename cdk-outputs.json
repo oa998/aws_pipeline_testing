@@ -1,5 +1,8 @@
 {
-  "mysql-db-stack": {
-    "dbEndpoint": "mdt4pd6b4stoso.czhk1xcr6n2z.us-east-1.rds.amazonaws.com"
+  "ecs-stack-zach": {
+    "envzachImageName": "026406728043.dkr.ecr.us-east-1.amazonaws.com/client-zach-env-zach-server-repository:latest",
+    "envzachImageRepositoryUri": "026406728043.dkr.ecr.us-east-1.amazonaws.com/client-zach-env-zach-server-repository",
+    "envzachClusterName": "client-zach-env-zach-server-cluster",
+    "envzachServiceName": "ecs-stack-zach-clientzachenvzachserverserviceServiceD2C55E25-sAYNsSTjVgv7"
   }
 }

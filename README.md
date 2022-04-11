@@ -14,4 +14,4 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 * `cdk synth`       emits the synthesized CloudFormation template
 
 
-example: `npx cdk deploy --outputs-file ./cdk-outputs.json`
+example: `npx cdk deploy --outputs-file ./cdk-outputs.json <<name_of_stack>>`

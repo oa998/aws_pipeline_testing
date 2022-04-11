@@ -19,9 +19,10 @@ export class MysqlStack extends cdk.Stack {
     });
 
     // 👇 create a security group for the EC2 instance
-    const ec2InstanceSG = new cdk.aws_ec2.SecurityGroup(this, 'ec2-instance-sg', {
-      vpc,
-    });
+    const ec2InstanceSG = new cdk.aws_ec2.SecurityGroup(
+      this,
+      'ec2-instance-sg',
+      { vpc });
 
     ec2InstanceSG.addIngressRule(
       // cdk.aws_ec2.Peer.ipv4('75.139.152.35/32'),
